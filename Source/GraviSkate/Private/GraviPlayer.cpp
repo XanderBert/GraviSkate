@@ -14,13 +14,3 @@ AGraviPlayer::AGraviPlayer()
 	SpringArmComponent->SetupAttachment(RootComponent);
 	CameraComponent->SetupAttachment(SpringArmComponent);
 }
-
-void AGraviPlayer::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
-void AGraviPlayer::BeginPlay()
-{
-	Super::BeginPlay();
-}
