@@ -3,19 +3,12 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GraviPlayer.h"
-#include "GameFramework/SpringArmComponent.h"
+#include "GameFramework/PawnMovementComponent.h"
+
 
 void AGraviController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//Get the spring arm component from the player
-	const AGraviPlayer* player = Cast<AGraviPlayer>(GetPawn());
-
-	ensure(player);
-	ensure(player->SpringArmComponent);
-	
-	SpringArmComponent = player->SpringArmComponent;
 }
 
 void AGraviController::SetupInputComponent()
@@ -45,17 +38,15 @@ void AGraviController::SetupInputComponent()
 	// EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Triggered, hud, &AABaseHUD::ToggleInGameMenu);
 }
 
+void AGraviController::Tick(float DeltaSeconds)
+{
+
+}
+
 void AGraviController::MoveForward()
 {
-	//Get the player
-	APawn* player = GetPawn();
-	ensure(player);
-	
-	//Get the forward vector of the player
-	const FVector forwardVector = player->GetActorForwardVector();
-
 	//Move the player
-	player->AddMovementInput(forwardVector, 1.0f);
+	GetPawn()->AddMovementInput(GetPawn()->GetActorForwardVector(), 1.0f);
 }
 
 void AGraviController::Look()
@@ -73,8 +64,11 @@ void AGraviController::Look()
 	newRotation.Yaw = mousePosition.X;
 	newRotation.Pitch = FMath::GetMappedRangeValueClamped(FVector2D(0.0f, viewportSize.Y), FVector2D(-90.0f, 90.0f), mousePosition.Y);
 	newRotation.Roll = 0.0f;
+
+	AGraviPlayer* player = Cast<AGraviPlayer>(GetPawn());
 	
-	SpringArmComponent->SetWorldRotation(newRotation);
+	player->SetDesiredRotation({0,newRotation.Yaw, 0});
+	player->PlayerCamera->SetActorRotation(newRotation);
 }
 
 void AGraviController::Shoot()

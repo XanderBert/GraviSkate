@@ -10,14 +10,20 @@ class GRAVISKATE_API AGraviPlayer : public ACharacter
 {
 	GENERATED_BODY()
 	
-public:	
-
-	AGraviPlayer();
+public:
+	virtual void BeginPlay() override;
 	
-	//-------------------- Components --------------------
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	class UCameraComponent* CameraComponent;
+	virtual void Tick(float DeltaSeconds) override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	class USpringArmComponent* SpringArmComponent;
+	void SetDesiredRotation(const FRotator& desiredRotation);
+	
+	UPROPERTY()
+	AActor* PlayerCamera;
+
+private:
+	UPROPERTY(EditDefaultsOnly, Category = Camera)
+	TSoftClassPtr<AActor> CameraClass;
+
+	//-------------------- Rotation --------------------
+	FRotator DesiredRotation;
 };

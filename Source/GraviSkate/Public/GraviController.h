@@ -6,7 +6,7 @@
 
 class UInputAction;
 class UInputMappingContext;
-class USpringArmComponent;
+
 /**
  * 
  */
@@ -20,11 +20,11 @@ public:
 
 	virtual void SetupInputComponent() override;
 
+	virtual void Tick(float DeltaSeconds) override;
+
 private:
-	UPROPERTY()
-	USpringArmComponent* SpringArmComponent;
 	
-	
+	//-------------------- Input  --------------------
 	UPROPERTY(EditDefaultsOnly, Category = Input, meta = (DisplayName = "Default Mapping Context"))
 	UInputMappingContext* MappingContext;
 	
