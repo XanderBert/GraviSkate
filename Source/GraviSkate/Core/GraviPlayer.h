@@ -26,4 +26,7 @@ private:
 
 	//-------------------- Rotation --------------------
 	FRotator DesiredRotation;
+
+	UPROPERTY(EditAnywhere, Category = Rotation, meta=(ToolTip="The lower the slower the rotation will be."))
+	float RotationExponent = 0.7f;
 };

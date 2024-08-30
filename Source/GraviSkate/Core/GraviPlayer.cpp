@@ -22,7 +22,7 @@ void AGraviPlayer::BeginPlay()
 
 	if(PlayerCamera)
 	{
-		// Set the player controller's view target to the spawned camera
+		// Set the player controller's view target to the spawned camera	
 		UGameplayStatics::GetPlayerController(this, 0)->SetViewTarget(PlayerCamera);
 	}
 }
@@ -31,7 +31,7 @@ void AGraviPlayer::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	SetActorRotation( FMath::InterpEaseIn(GetActorRotation(), DesiredRotation, DeltaSeconds, 0.7f));
+	SetActorRotation( FMath::InterpEaseIn(GetActorRotation(), DesiredRotation, DeltaSeconds, RotationExponent));
 }
 
 void AGraviPlayer::SetDesiredRotation(const FRotator& desiredRotation)

@@ -24,7 +24,7 @@ void AGraviCamera::Tick(float DeltaSeconds)
 	const FVector currentTrans = GetActorLocation();
 	const FVector desiredTrans = GetOwner()->GetActorLocation();
 
-	const FVector newTrans = FMath::InterpEaseIn(currentTrans, desiredTrans, DeltaSeconds, 0.2f);
+	const FVector newTrans = FMath::InterpEaseIn(currentTrans, desiredTrans, DeltaSeconds, RotationExponent);
 
 	SetActorLocation(newTrans);
 }

@@ -20,4 +20,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class USpringArmComponent* SpringArmComponent;
+	
+private:
+	UPROPERTY(EditAnywhere, Category = Rotation, meta=(ToolTip="The lower the slower the rotation will be."))
+    float RotationExponent = 0.2f;
 };
