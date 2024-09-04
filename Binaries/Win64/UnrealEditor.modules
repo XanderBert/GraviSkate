@@ -2,6 +2,7 @@
 	"BuildId": "33043543",
 	"Modules": 
 	{
-		"GraviSkate": "UnrealEditor-GraviSkate.dll"
+		"GraviSkate": "UnrealEditor-GraviSkate.dll",
+		"GrindEditor": "UnrealEditor-GrindEditor.dll"
 	}
 }

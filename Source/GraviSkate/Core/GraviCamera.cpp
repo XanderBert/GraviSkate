@@ -11,7 +11,7 @@ AGraviCamera::AGraviCamera()
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
 
-	SpringArmComponent->SetupAttachment(RootComponent);
+	SetRootComponent(SpringArmComponent);
 	CameraComponent->SetupAttachment(SpringArmComponent);
 }
 

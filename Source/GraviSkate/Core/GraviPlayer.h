@@ -5,12 +5,16 @@
 #include "GraviPlayer.generated.h"
 
 
+class USphereComponent;
+
 UCLASS()
 class GRAVISKATE_API AGraviPlayer : public ACharacter
 {
 	GENERATED_BODY()
 	
 public:
+	AGraviPlayer();
+	
 	virtual void BeginPlay() override;
 	
 	virtual void Tick(float DeltaSeconds) override;
@@ -19,6 +23,11 @@ public:
 	
 	UPROPERTY()
 	AActor* PlayerCamera;
+	
+	//-------------------- Components --------------------
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	class USphereComponent* ProximityComponent;
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = Camera)
@@ -29,4 +38,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = Rotation, meta=(ToolTip="The lower the slower the rotation will be."))
 	float RotationExponent = 0.7f;
+
+
+
+	UFUNCTION()
+	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 };

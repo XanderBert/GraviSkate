@@ -1,7 +1,15 @@
 #include "GraviPlayer.h"
 
+#include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
 
+
+AGraviPlayer::AGraviPlayer()
+{
+	ProximityComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Proximity Component"));
+	ProximityComponent->SetupAttachment(RootComponent);
+	ProximityComponent->OnComponentBeginOverlap.AddDynamic(this, &AGraviPlayer::OnBeginOverlap);
+}
 
 void AGraviPlayer::BeginPlay()
 {
@@ -37,4 +45,14 @@ void AGraviPlayer::Tick(float DeltaSeconds)
 void AGraviPlayer::SetDesiredRotation(const FRotator& desiredRotation)
 {
 	DesiredRotation = desiredRotation;
+}
+
+void AGraviPlayer::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Player -> Begin Overlap"));
+
+
+	//If the overlapped Actor has a rail component we should stick to it.
+	
 }
