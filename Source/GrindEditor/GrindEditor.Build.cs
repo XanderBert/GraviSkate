@@ -21,7 +21,11 @@ public class GrindEditor : ModuleRules
                 "Engine",
                 "UnrealEd",
                 "ComponentVisualizers",
-                "InputCore",
+                "InputCore", 
+                "EditorStyle",
+                "Slate",
+                "SlateCore",
+                
             }
         );
     }

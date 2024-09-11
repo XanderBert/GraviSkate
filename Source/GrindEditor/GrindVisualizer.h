@@ -1,8 +1,17 @@
 ﻿#pragma once
 
 #include "ComponentVisualizer.h"
+#include "EditorStyleSet.h"
+#include "IDetailCustomization.h"
+
 
 class UGrindComponent;
+
+
+
+//
+// VisProxies
+//
 
 /**Base class for clickable targeting editing proxies*/
 struct HGrindingVisProxy : public HComponentVisProxy
@@ -15,25 +24,42 @@ struct HGrindingVisProxy : public HComponentVisProxy
 };
 
 /**Proxy for Line*/
-struct HLineProxy : public HGrindingVisProxy 
+struct HPointProxy : public HGrindingVisProxy 
 {
 	DECLARE_HIT_PROXY();
 
-	HLineProxy (const UActorComponent* InComponent, const TPair<FVector, FVector>& InLine)
+	HPointProxy (const UActorComponent* InComponent, uint32 InPointIndex)
 	: HGrindingVisProxy (InComponent)
-	, Line(InLine)
+	, PointIndex(InPointIndex)
 	{}
 
-	TPair<FVector, FVector> Line;
+	uint32 PointIndex;
 };
+
+
+//
+//Context menu commands
+//
+
+class FTargetingVisualizerCommands : public TCommands<FTargetingVisualizerCommands>
+{
+public:
+    FTargetingVisualizerCommands();
+    virtual void RegisterCommands() override;
+    TSharedPtr<FUICommandInfo> Duplicate;
+    TSharedPtr<FUICommandInfo> SetConnectingMode;
+};
+
+
+
+//
+// Component Visualizer
+//
 
 class  FGrindVisualizer : public FComponentVisualizer
 {
 public:
-
-	// Begin FComponentVisualizer interface
-
-	//virtual void OnRegister() override;
+	virtual void OnRegister() override;
 	virtual void DrawVisualization(const UActorComponent* Component, const FSceneView* View, FPrimitiveDrawInterface* PDI) override;
 	virtual bool VisProxyHandleClick(FEditorViewportClient* InViewportClient, HComponentVisProxy* VisProxy, const FViewportClick& Click) override;
 	virtual void EndEditing() override;
@@ -41,20 +67,36 @@ public:
 	// virtual bool GetCustomInputCoordinateSystem(const FEditorViewportClient* ViewportClient, FMatrix& OutMatrix) const override;
 	virtual bool HandleInputDelta(FEditorViewportClient* ViewportClient, FViewport* Viewport, FVector& DeltaTranslate, FRotator& DeltaRotate, FVector& DeltaScale) override;
 	virtual bool HandleInputKey(FEditorViewportClient* ViewportClient, FViewport* Viewport, FKey Key, EInputEvent Event) override;
-	// virtual TSharedPtr<SWidget> GenerateContextMenu() const override;
+	virtual TSharedPtr<SWidget> GenerateContextMenu() const override;
 	// virtual void DrawVisualizationHUD(const UActorComponent* Component, const FViewport* Viewport, const FSceneView* View, FCanvas* Canvas) override;
-	// virtual bool IsVisualizingArchetype();
-
-	// End FComponentVisualizer interface
+	virtual bool IsVisualizingArchetype() const override;
 
 
+	void DuplicateSelectedPoint();
 private:
-	TPair<FVector, FVector> CurrentSelectedLine;
-	TWeakObjectPtr<UGrindComponent> GrindComponent;
+	UGrindComponent* GetGrindComponent() const;;
+	
+	uint32 CurrentSelectedPointIndex = INDEX_NONE;
+	FComponentPropertyPath GrindComponentPath;
+
+	
 	
 	
 	/**Output log commands*/
-	//TSharedPtr<FUICommandList> TargetingComponentVisualizerActions;
+	TSharedPtr<FUICommandList> Actions;
+	bool bConnectingMode = false;
+};
+
+
+//
+// Custom Detail Panel
+//
+
+class FGrindComponentDetails : public IDetailCustomization
+{
+public:
+	static TSharedRef<IDetailCustomization> MakeInstance();
+	virtual void CustomizeDetails(IDetailLayoutBuilder& DetailBuilder) override;
 };
 
 

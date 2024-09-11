@@ -4,35 +4,39 @@
 #include "Components/ActorComponent.h"
 #include "GrindComponent.generated.h"
 
-
-UCLASS(ClassGroup=(Grind), meta=(BlueprintSpawnableComponent))
-class GRAVISKATE_API UGrindComponent : public UActorComponent
+UCLASS(ClassGroup=(Grind), meta=(BlueprintSpawnableComponent, DisplayName = "Grind Component", BlueprintType))
+class GRAVISKATE_API UGrindComponent : public USceneComponent
 {
 	GENERATED_BODY()
 
 public:
 	UGrindComponent();
 
-	virtual void OnRegister() override;
+	virtual void OnComponentCreated() override;
+	
+	void CalculatePossibleGrindableEdges();
 
-	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;	
-	
-	UPROPERTY(EditAnywhere)
-	float HardEdgeThresholdDegrees = 50.0f;
 
-	UPROPERTY(EditAnywhere)
-	float PositionTolerance  = 15.0f;
+
+
+
 	
-	UPROPERTY(EditAnywhere)
-	float DirectionTolerance  = 15.0f;
+	float PositionTolerance;
+
 	
-	UPROPERTY(EditAnywhere)
-	float BottomThreshold = 5.0f;
+
+
+
+
 	
-	UPROPERTY(EditAnywhere)
-	float MinEdgeLength = 20.0f;
-	
-	TArray<TPair<FVector, FVector>> Lines;
+	UPROPERTY(VisibleAnywhere, Category = "Grind")
+	TArray<FVector> PossibleGrindablePoints;	
+
+	UPROPERTY(VisibleAnywhere, Category = "Grind")
+	TArray<uint32> LineIndices;
+
+
 private:
-	void CalculateGrindableEdges();
+	UPROPERTY()
+	UStaticMeshComponent* StaticMeshComponent;
 };

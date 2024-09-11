@@ -17,15 +17,25 @@ void FGrindEditorModule::StartupModule()
 		{
 			GUnrealEd->RegisterComponentVisualizer(UGrindComponent::StaticClass()->GetFName(), Visualizer);
 			Visualizer->OnRegister();
+
+			FPropertyEditorModule& PropertyModule = FModuleManager::GetModuleChecked<FPropertyEditorModule>("PropertyEditor");
+			PropertyModule.RegisterCustomClassLayout(UGrindComponent::StaticClass()->GetFName(), FOnGetDetailCustomizationInstance::CreateStatic(&FGrindComponentDetails::MakeInstance));
+			
 		}
 	}
 }
-
+ 
 void FGrindEditorModule::ShutdownModule()
 {
 	if (GUnrealEd)
 	{
 		GUnrealEd->UnregisterComponentVisualizer(UGrindComponent::StaticClass()->GetFName());
+	}
+
+	if(FModuleManager::Get().IsModuleLoaded("PropertyEditor"))
+	{
+		auto& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
+		PropertyModule.UnregisterCustomClassLayout(UGrindComponent::StaticClass()->GetFName());
 	}
 }
 
