@@ -3,8 +3,10 @@
 #include "DetailCategoryBuilder.h"
 #include "DetailLayoutBuilder.h"
 #include "DetailWidgetRow.h"
+#include "UnrealEdGlobals.h"
 #include "GraviSkate/Components/GrindComponent.h"
 #include "Widgets/Input/SNumericEntryBox.h"
+#include "Editor/UnrealEdEngine.h"
 
 IMPLEMENT_HIT_PROXY(HGrindingVisProxy, HComponentVisProxy);
 IMPLEMENT_HIT_PROXY(HPointProxy, HGrindingVisProxy);
@@ -272,6 +274,37 @@ void FGrindComponentDetails::CustomizeDetails(IDetailLayoutBuilder& DetailBuilde
 			 }).ContentPadding(FMargin(10.0f)).HAlign(HAlign_Center).VAlign(VAlign_Center)
 	 	]
     ];
+
+
+	MyCategory.AddCustomRow(FText::FromString("Connecting Mode"))
+	.NameContent()
+	[
+		SNew(STextBlock)
+	   .Text(LOCTEXT("Ceck", "Connecting Mode"))
+	   .Font(IDetailLayoutBuilder::GetDetailFont())
+	]
+	.ValueContent()
+	.MinDesiredWidth(500)
+	[
+		//Checkbox
+		SNew(SCheckBox).IsChecked_Lambda([this]
+		{
+			//Get the FGrindVisualizer
+			TSharedPtr<class FComponentVisualizer> Visualizer = GUnrealEd->FindComponentVisualizer(UGrindComponent::StaticClass());
+			FGrindVisualizer* GrindVisualizer = static_cast<FGrindVisualizer*>(Visualizer.Get());
+			if(GrindVisualizer->IsConnectingMode())
+				return ECheckBoxState::Checked;
+
+
+			return ECheckBoxState::Unchecked;
+		}).OnCheckStateChanged_Lambda([this] (ECheckBoxState NewState)
+		{
+			//Get the FGrindVisualizer
+			TSharedPtr<class FComponentVisualizer> Visualizer = GUnrealEd->FindComponentVisualizer(UGrindComponent::StaticClass());
+			FGrindVisualizer* GrindVisualizer = static_cast<FGrindVisualizer*>(Visualizer.Get());
+			GrindVisualizer->SetConnectingMode( NewState == ECheckBoxState::Checked);
+		})
+	];
 }
 
 

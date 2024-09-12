@@ -71,7 +71,9 @@ public:
 	// virtual void DrawVisualizationHUD(const UActorComponent* Component, const FViewport* Viewport, const FSceneView* View, FCanvas* Canvas) override;
 	virtual bool IsVisualizingArchetype() const override;
 
-
+	bool IsConnectingMode() const { return bConnectingMode; }
+	void SetConnectingMode(bool bIsConnected) { bConnectingMode = bIsConnected; }
+	
 	void DuplicateSelectedPoint();
 private:
 	UGrindComponent* GetGrindComponent() const;;
